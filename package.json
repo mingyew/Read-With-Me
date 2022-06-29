@@ -1,28 +1,24 @@
 {
   "name": "read-with-me",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "proxy": "http://localhost:3001",
   "scripts": {
-    "start": "node server/index.js",
-    "build": "cd client && npm install && npm run build"
-  },
-  "engines": {
-    "node": "16.15.1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.1"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mingyew/Read-With-Me.git"
   },
   "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/mingyew/Read-With-Me/issues"
   },
   "homepage": "https://github.com/mingyew/Read-With-Me#readme",
-  "description": ""
+  "dependencies": {
+    "express": "^4.18.1",
+    "http-proxy-middleware": "^2.0.6"
+  }
 }
