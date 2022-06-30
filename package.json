@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/mingyew/Read-With-Me#readme",
   "dependencies": {
+    "bootstrap": "^5.2.0-beta1",
     "express": "^4.18.1",
-    "http-proxy-middleware": "^2.0.6"
+    "http-proxy-middleware": "^2.0.6",
+    "react-bootstrap": "^2.4.0"
   }
 }
