@@ -26,13 +26,14 @@ const translateText = async (text) => {
   return translation;
 };
 
-app.get("/api", (req, res) => {
-  res.json({ message: "Hello to developer!" });
+app.post("/api/fetch-stories", async (req, res) => {
+  const text = req.body.text;
+  const translation = await translateText(text);
+  res.json({ translated: translation });
 });
 
 app.post("/api/translate-text", async (req, res) => {
   const text = req.body.text;
-  console.log(text);
   const translation = await translateText(text);
   res.json({ translated: translation });
 });
