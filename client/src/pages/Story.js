@@ -15,29 +15,36 @@ function Story() {
     return story.id == id;
   });
 
-  const title = foundStory.title;
-  const author = foundStory.author;
-  const paragraphs = foundStory.body;
+  const [title, setTitle] = useState(foundStory.title);
+  const [author, setAuthor] = useState(foundStory.author);
+  const [body, setBody] = useState(foundStory.body);
 
-  const [translatedText, setTranslatedText] = useState("");
+  const [translatedStory, setTranslatedStory] = useState("");
 
-  const translateText = () => {
+  const translateStory = (targetedLang) => {
     fetch("http://localhost:3001/api/translate-text", {
       method: "POST",
-      body: "test",
+      body: JSON.stringify({ text: foundStory, language: targetedLang }),
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
-      .then((data) => setTranslatedText(data.translated));
+      .then((data) => setTranslatedStory(data.translated));
   };
+
+  useEffect(() => {
+    if (translatedStory != "") {
+      setTitle(translatedStory.title[0]);
+      setAuthor(translatedStory.author[0]);
+      setBody(translatedStory.body[0]);
+    }
+  }, [translatedStory, setTranslatedStory]);
 
   return (
     <>
       <Topbar />
-      <Translatebar translateText={translateText} />
-      {console.log(translatedText)}
+      <Translatebar translateStory={translateStory} />
       <Container>
         <Row className="justify-content-md-center mt-4">
           <Col className="col-lg-6">
@@ -48,14 +55,9 @@ function Story() {
             >
               {title}
             </h2>
-            {paragraphs.map((paragraph, i) => (
+            {body.map((paragraph, i) => (
               <div key={i}>
-                {paragraph.map((line, i) => (
-                  <div key={i}>
-                    {line}
-                    <br />
-                  </div>
-                ))}
+                {paragraph}
                 <br />
               </div>
             ))}
