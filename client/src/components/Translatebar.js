@@ -12,10 +12,11 @@ const Translatebar = (props) => {
       }}
     >
       <div className="container d-flex flex-wrap justify-content-md-end">
-        <DropdownTranslate />
+        // this part is the problem if i remove ru it works
+        <DropdownTranslate translateStory={props.translateStory("ru")} />
         <Button
           className="btn btn-light text-dark ms-2"
-          onClick={props.translateText}
+          //onClick={props.translateStory}
         >
           Record
         </Button>
