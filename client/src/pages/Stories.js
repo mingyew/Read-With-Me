@@ -23,6 +23,7 @@ const Stories = () => {
           {stories.map((story) => (
             <Story
               key={story.id}
+              id={story.id}
               image={story.image}
               title={story.title}
               author={story.author}

@@ -7,8 +7,7 @@ import { useParams } from "react-router";
 
 import { Container, Row, Col } from "react-bootstrap";
 
-// Story PAGE! Not to be confused with Story component or Story data object. RENAME THIS
-function Story() {
+function Storypage() {
   const { id } = useParams();
   const stories = Object.values(Storylist);
 
@@ -25,7 +24,7 @@ function Story() {
   const [translatedStory, setTranslatedStory] = useState(null);
 
   const translateStory = (targetedLang) => {
-    console.log("translateStory() called with targetedLang=" + targetedLang)
+    console.log("translateStory() called with targetedLang=" + targetedLang);
     fetch("http://localhost:3001/api/translate-text", {
       method: "POST",
       body: JSON.stringify({ text: foundStory, language: targetedLang }),
@@ -34,15 +33,14 @@ function Story() {
       },
     })
       .then((response) => response.json())
-      .then(data => {
-        console.log("Got data!")
+      .then((data) => {
         if (data.translated) {
           setTranslatedStory(data.translated);
         } else {
           // do something with the error
-          setTranslatedStory({title: "ERROR", author: "ERROR", body: []});
+          setTranslatedStory({ title: "ERROR", author: "ERROR", body: [] });
         }
-      })
+      });
   };
 
   useEffect(() => {
@@ -83,4 +81,4 @@ function Story() {
   );
 }
 
-export default Story;
+export default Storypage;
