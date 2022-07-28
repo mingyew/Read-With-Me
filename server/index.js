@@ -18,20 +18,22 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 const translateText = async (text, targetedLang) => {
-  try {
-    const translation = await translate.translate(text, targetedLang);
-    return translation;
-  } catch (err) {
-    return "Sorry! Translation did not work";
-  }
+  const translation = await translate.translate(text, targetedLang);
+  // this returns an array with 1 object:
+  return translation[0];
 };
 
 const translateStory = async (story, targetedLang) => {
   var translatedStory = {};
-  translatedStory.title = await translateText(story.text.title, targetedLang);
-  translatedStory.body = await translateText(story.text.body, targetedLang);
-  translatedStory.author = await translateText(story.text.author, targetedLang);
-  return translatedStory;
+  try {
+    translatedStory.title = await translateText(story.text.title, targetedLang);
+    translatedStory.body = await translateText(story.text.body, targetedLang);
+    translatedStory.author = await translateText(story.text.author, targetedLang);
+    return translatedStory;
+  } catch (err) {
+    console.log("Sorry! Translation did not work: " + err);
+    return null
+  }
 };
 
 app.post("/api/translate-text", async (req, res) => {

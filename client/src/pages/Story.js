@@ -7,21 +7,25 @@ import { useParams } from "react-router";
 
 import { Container, Row, Col } from "react-bootstrap";
 
+// Story PAGE! Not to be confused with Story component or Story data object. RENAME THIS
 function Story() {
   const { id } = useParams();
   const stories = Object.values(Storylist);
 
+  // The story from the database
   var foundStory = stories.find(function (story) {
-    return story.id == id;
+    return story.id === id;
   });
 
+  // Declare state variables, internal to this page. Default to un-translated story
   const [title, setTitle] = useState(foundStory.title);
   const [author, setAuthor] = useState(foundStory.author);
   const [body, setBody] = useState(foundStory.body);
 
-  const [translatedStory, setTranslatedStory] = useState("");
+  const [translatedStory, setTranslatedStory] = useState(null);
 
   const translateStory = (targetedLang) => {
+    console.log("translateStory() called with targetedLang=" + targetedLang)
     fetch("http://localhost:3001/api/translate-text", {
       method: "POST",
       body: JSON.stringify({ text: foundStory, language: targetedLang }),
@@ -30,14 +34,22 @@ function Story() {
       },
     })
       .then((response) => response.json())
-      .then((data) => setTranslatedStory(data.translated));
+      .then(data => {
+        console.log("Got data!")
+        if (data.translated) {
+          setTranslatedStory(data.translated);
+        } else {
+          // do something with the error
+          setTranslatedStory({title: "ERROR", author: "ERROR", body: []});
+        }
+      })
   };
 
   useEffect(() => {
-    if (translatedStory != "") {
-      setTitle(translatedStory.title[0]);
-      setAuthor(translatedStory.author[0]);
-      setBody(translatedStory.body[0]);
+    if (translatedStory) {
+      setTitle(translatedStory.title);
+      setAuthor(translatedStory.author);
+      setBody(translatedStory.body);
     }
   }, [translatedStory, setTranslatedStory]);
 

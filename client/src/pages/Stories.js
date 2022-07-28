@@ -4,6 +4,7 @@ import Story from "../components/Story.js";
 import Storylist from "../stories/Storylist";
 import { Container, Row } from "react-bootstrap";
 
+// Stories PAGE!
 const Stories = () => {
   const stories = Object.values(Storylist);
   return (

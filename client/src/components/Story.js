@@ -1,6 +1,7 @@
 import { Col, Badge } from "react-bootstrap";
 import React from "react";
 
+// Story COMPONENT
 const Story = ({ image, title, author, time }) => {
   return (
     <Col className="mr-lg-5">
