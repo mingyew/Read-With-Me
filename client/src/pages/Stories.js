@@ -2,11 +2,13 @@ import React from "react";
 import Topbar from "../components/Topbar.js";
 import Story from "../components/Story.js";
 import Storylist from "../stories/Storylist";
+import { useAuth } from "../contexts/AuthContext";
 import { Container, Row } from "react-bootstrap";
 
-// Stories PAGE!
 const Stories = () => {
+  const { currentUser } = useAuth();
   const stories = Object.values(Storylist);
+
   return (
     <>
       <Topbar />
@@ -24,6 +26,7 @@ const Stories = () => {
             <Story
               key={story.id}
               id={story.id}
+              uid={currentUser.uid}
               image={story.image}
               title={story.title}
               author={story.author}

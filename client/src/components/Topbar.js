@@ -1,16 +1,29 @@
 import React from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import {
   Navbar,
   Nav,
   Container,
-  Form,
   Button,
   NavDropdown,
-  FormControl,
+  Alert,
 } from "react-bootstrap";
 
 const Topbar = () => {
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    try {
+      await logout();
+      navigate.push("/login");
+    } catch {
+      <Alert variant="danger">Failed to log out</Alert>;
+    }
+  }
+
   return (
     <Navbar
       collapseOnSelect
@@ -41,15 +54,25 @@ const Topbar = () => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          <Form className="d-flex">
-            <FormControl
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-          </Form>
-          <Button variant="warning">Sign In</Button>
+          <Nav>
+            {!currentUser && (
+              <React.Fragment>
+                <Button variant="outline-light" className="me-2" href="/login">
+                  Login
+                </Button>
+                <Button variant="warning" href="/signup">
+                  Sign In
+                </Button>
+              </React.Fragment>
+            )}
+            {currentUser && (
+              <NavDropdown title={currentUser.email}>
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

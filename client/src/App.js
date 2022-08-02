@@ -12,8 +12,6 @@ import Dashboard from "./pages/Dashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
-  const isAuthenticated = false;
-
   return (
     <Router>
       <AuthProvider>
@@ -24,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/stories" element={<Stories />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/story/:id" element={<StoryPage />}></Route>
+          <Route path="/story/:id/:uid" element={<StoryPage />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         </Routes>
       </AuthProvider>

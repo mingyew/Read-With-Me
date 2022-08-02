@@ -3,10 +3,10 @@ import { Col, Badge } from "react-bootstrap";
 import React from "react";
 
 // Story COMPONENT
-const Story = ({ id, image, title, author, time }) => {
+const Story = ({ id, image, title, author, time, uid }) => {
   return (
     <Col className="mr-lg-5">
-      <Link to={`/story/${id}`}>
+      <Link to={`/story/${id}/${uid}`}>
         <img
           src={image}
           className="img-fluid"

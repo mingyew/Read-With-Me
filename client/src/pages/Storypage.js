@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Translatebar from "../components/Translatebar.js";
 import Topbar from "../components/Topbar.js";
 import Storylist from "../stories/Storylist";
+import Recorder from "../components/Recorder";
 import { useParams } from "react-router";
 
 import { Container, Row, Col } from "react-bootstrap";
 
-function Storypage() {
+function StoryPage() {
   const { id } = useParams();
   const stories = Object.values(Storylist);
 
@@ -76,9 +76,10 @@ function Storypage() {
         <Row className="justify-content-md-end mt-1" style={{ color: "grey" }}>
           Referenced from {author}
         </Row>
+        <Recorder />
       </Container>
     </>
   );
 }
 
-export default Storypage;
+export default StoryPage;

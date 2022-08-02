@@ -18,7 +18,6 @@ export default function Login() {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      this.setState({ isAuthenticated: true });
       navigate("/", { replace: true });
     } catch {
       setError("Failed to log in");

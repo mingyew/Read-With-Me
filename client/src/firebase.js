@@ -1,17 +1,15 @@
-import firebase from firebase/app
-import "firebase/auth"
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
+const app = firebase.initializeApp({
+  apiKey: "AIzaSyCvWiPewz4V-T_v8yr5Grc-EOUgWlTwZZo",
+  authDomain: "read-with-me-354921.firebaseapp.com",
+  projectId: "read-with-me-354921",
+  storageBucket: "read-with-me-354921.appspot.com",
+  messagingSenderId: "278789110828",
+  appId: "1:278789110828:web:917962350e7aa9081a6589",
+});
 
-const login = firebase.initaliseApp ({
+export const auth = app.auth();
 
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    projectID: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID,
-})
-
-export const auth = app.auth()
-
-export default login
+export default app;
