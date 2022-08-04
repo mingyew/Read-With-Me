@@ -1,18 +1,35 @@
 import React, { useState } from "react";
 import DropdownTranslate from "./Dropdownbutton";
 import { useReactMediaRecorder } from "react-media-recorder";
+import { storage } from "../firebase";
 
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
+import { ref, uploadBytesResumable } from "firebase/storage";
 
 const Translatebar = (props) => {
   const { startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder(
     {}
   );
 
+  const [progress, setProgress] = useState("0");
+
+  const uploadAudio = (blob) => {
+    if (!blob) return;
+    const storageRef = ref(storage, `/files/`);
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on("state_changed", (snapshot) => {
+      const prog =
+        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+      setProgress(prog);
+    });
+  };
+
   const popover = (
     <Popover id="popover-basic">
       <Popover.Header>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex">
           <Button
             variant="success"
             size="sm"
@@ -30,6 +47,9 @@ const Translatebar = (props) => {
             Stop
           </Button>
           <Button size="sm">Save</Button>
+        </div>
+        <div className="me-auto">
+          <h5>{progress}% uploaded</h5>
         </div>
       </Popover.Header>
       <Popover.Body>

@@ -77,7 +77,7 @@ function StoryPage() {
           Referenced from {author}
         </Row>
         <Comments
-          commentsUrl="http://localhost:3000/comments"
+          commentsUrl="http://localhost:3010/comments"
           currentUserId="1"
         />
       </Container>
