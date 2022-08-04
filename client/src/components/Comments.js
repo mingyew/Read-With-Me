@@ -11,6 +11,8 @@ import {
 const Comments = ({ commentsUrl, currentUserId }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
+
+  //rrot comment instead of setting to backend comment == null..make sure its the saved file of recording
   const rootComments = backendComments.filter(
     (backendComment) => backendComment.parentId === null
   );
@@ -54,6 +56,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
     }
   };
 
+  //mount comments. remmeber to get api from the real database
   useEffect(() => {
     getCommentsApi().then((data) => {
       setBackendComments(data);
@@ -65,7 +68,6 @@ const Comments = ({ commentsUrl, currentUserId }) => {
       <h2 className="comments-title">Try Reading Here:</h2>
 
       <AudioComment />
-
       <div className="comments-container">
         {rootComments.map((rootComment) => (
           <Comment
