@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DropdownTranslate from "./Dropdownbutton";
 import { useReactMediaRecorder } from "react-media-recorder";
 
@@ -29,9 +29,7 @@ const Translatebar = (props) => {
           >
             Stop
           </Button>
-          <Button size="sm" onClick={}>
-            Save
-          </Button>
+          <Button size="sm">Save</Button>
         </div>
       </Popover.Header>
       <Popover.Body>

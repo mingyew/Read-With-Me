@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Translatebar from "../components/Translatebar.js";
 import Topbar from "../components/Topbar.js";
 import Storylist from "../stories/Storylist";
-import Recorder from "../components/Recorder";
 import { useParams } from "react-router";
+import Comments from "../components/Comments";
 
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -76,7 +76,10 @@ function StoryPage() {
         <Row className="justify-content-md-end mt-1" style={{ color: "grey" }}>
           Referenced from {author}
         </Row>
-        <Recorder />
+        <Comments
+          commentsUrl="http://localhost:3000/comments"
+          currentUserId="1"
+        />
       </Container>
     </>
   );
