@@ -3,27 +3,36 @@ import DropdownTranslate from "./Dropdownbutton";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { storage } from "../firebase";
 
-import { Button, Popover, OverlayTrigger } from "react-bootstrap";
-import { ref, uploadBytesResumable } from "firebase/storage";
+import { Button, Popover, OverlayTrigger, ProgressBar } from "react-bootstrap";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Translatebar = (props) => {
-  const { startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder(
-    {}
-  );
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({});
 
-  const [progress, setProgress] = useState("0");
+  const [progress, setProgress] = useState(0);
 
-  const uploadAudio = (blob) => {
-    if (!blob) return;
-    const storageRef = ref(storage, `/files/`);
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+  const uploadAudio = async () => {
+    const audioBlob = await fetch(mediaBlobUrl).then((r) => r.blob());
+    const mediaFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
 
-    uploadTask.on("state_changed", (snapshot) => {
-      const prog =
-        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    if (!mediaFile) return;
+    const storageRef = ref(storage, `/${props.uid}/`);
+    const uploadTask = uploadBytesResumable(storageRef, mediaFile);
 
-      setProgress(prog);
-    });
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+      }
+    );
   };
 
   const popover = (
@@ -46,10 +55,17 @@ const Translatebar = (props) => {
           >
             Stop
           </Button>
-          <Button size="sm">Save</Button>
-        </div>
-        <div className="me-auto">
-          <h5>{progress}% uploaded</h5>
+          <Button size="sm" onClick={() => uploadAudio(mediaBlobUrl)}>
+            Save
+          </Button>
+          <div className="row ms-auto align-items-center">
+            <h2 style={{ fontSize: 12 }}>{status}</h2>
+            <ProgressBar
+              striped
+              now={progress}
+              label={`${progress}% uploaded`}
+            />
+          </div>
         </div>
       </Popover.Header>
       <Popover.Body>
@@ -72,7 +88,7 @@ const Translatebar = (props) => {
         backgroundColor: "#D3D3D3",
       }}
     >
-      <div className="container d-flex justify-content-end">
+      <div className="container d-flex">
         <DropdownTranslate translateStory={props.translateStory} />
         <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
           <Button className="btn btn-light text-dark ms-2">Record</Button>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Comment from "./Comment";
-import AudioComment from "./AudioComment";
 import {
   getComments as getCommentsApi,
   createComment as createCommentApi,
@@ -67,7 +66,6 @@ const Comments = ({ commentsUrl, currentUserId }) => {
     <div className="comments">
       <h2 className="comments-title">Try Reading Here:</h2>
 
-      <AudioComment />
       <div className="comments-container">
         {rootComments.map((rootComment) => (
           <Comment

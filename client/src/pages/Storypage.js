@@ -8,7 +8,7 @@ import Comments from "../components/Comments";
 import { Container, Row, Col } from "react-bootstrap";
 
 function StoryPage() {
-  const { id } = useParams();
+  const { id, uid } = useParams();
   const stories = Object.values(Storylist);
 
   // The story from the database
@@ -54,7 +54,7 @@ function StoryPage() {
   return (
     <>
       <Topbar />
-      <Translatebar translateStory={translateStory} />
+      <Translatebar translateStory={translateStory} uid={uid} />
       <Container>
         <Row className="justify-content-md-center mt-4">
           <Col className="col-lg-6">
