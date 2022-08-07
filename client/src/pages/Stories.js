@@ -27,8 +27,7 @@ const Stories = () => {
               key={story.id}
               id={story.id}
               uid={currentUser.uid}
-              im
-              ge={story.image}
+              image={story.image}
               title={story.title}
               author={story.author}
               time={story.time}

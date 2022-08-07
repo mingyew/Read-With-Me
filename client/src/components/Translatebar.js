@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import DropdownTranslate from "./Dropdownbutton";
 import { useReactMediaRecorder } from "react-media-recorder";
-import { storage } from "../firebase";
+import { storage, colRef } from "../firebase";
+import { addDoc } from "firebase/firestore";
 
 import { Button, Popover, OverlayTrigger, ProgressBar } from "react-bootstrap";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -17,7 +18,10 @@ const Translatebar = (props) => {
     const mediaFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
 
     if (!mediaFile) return;
-    const storageRef = ref(storage, `/${props.uid}/`);
+    const storageRef = ref(
+      storage,
+      `/${props.uid}/${props.translateStory.title}`
+    );
     const uploadTask = uploadBytesResumable(storageRef, mediaFile);
 
     uploadTask.on(
@@ -34,6 +38,19 @@ const Translatebar = (props) => {
       }
     );
   };
+
+  const addDoc =
+    (colRef,
+    {
+      uid: props.uid,
+      title: props.translateStory.title,
+      story: props.translateStory.body,
+      author: props.translateStory.author,
+      audioURL: String(`${props.uid}/${props.translateStory.title}`),
+    });
+  // .then(function (docRef) {
+  //   return docRef.id;
+  // });
 
   const popover = (
     <Popover id="popover-basic">
@@ -94,7 +111,12 @@ const Translatebar = (props) => {
           <Button className="btn btn-light text-dark ms-2">Record</Button>
         </OverlayTrigger>
         <div className="ms-auto">
-          <Button className="btn btn-light text-dark ms-2">Publish</Button>
+          <Button
+            className="btn btn-light text-dark ms-2"
+            onClick={() => addDoc()}
+          >
+            Publish
+          </Button>
         </div>
       </div>
     </div>
