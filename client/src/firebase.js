@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
 import { getStorage } from "firebase/storage";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 import "firebase/compat/auth";
 
 const app = firebase.initializeApp({
@@ -18,15 +18,15 @@ export const storage = getStorage(app);
 const db = getFirestore();
 export const colRef = collection(db, "savedstories");
 
-getDocs(colRef)
-  .then((snapshot) => {
-    let savedstories = [];
-    savedstories.docs.forEach((doc) => {
-      savedstories.push({ ...doc.data, id: doc.id });
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// getDocs(colRef)
+//   .then((snapshot) => {
+//     let savedstories = [];
+//     savedstories.docs.forEach((doc) => {
+//       savedstories.push({ ...doc.data, id: doc.id });
+//     });
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 export default app;

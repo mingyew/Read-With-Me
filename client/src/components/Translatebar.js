@@ -4,59 +4,69 @@ import { storage, colRef } from "../firebase";
 import { addDoc } from "firebase/firestore";
 import { VoiceRecorder } from "./VoiceRecorder";
 
-import { Button, Popover, OverlayTrigger, ProgressBar } from "react-bootstrap";
+import {
+  Button,
+  Popover,
+  OverlayTrigger,
+  ProgressBar,
+  Alert,
+} from "react-bootstrap";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Translatebar = (props) => {
   const [progress, setProgress] = useState(0);
+  const [teacheraudio, setTeaacheraudio] = useState(null);
 
   const {
     mediastatus,
     audioBlobURL,
+    Record,
     voiceRecorderStart,
     voiceRecorderStop,
-    saveFile,
   } = VoiceRecorder();
 
   const uploadAudio = async () => {
-    VoiceRecorder.saveFile().then((file) => {
-      if (!file) return;
-      const storageRef = ref(
-        storage,
-        `/${props.uid}/${props.translateStory.title}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
+    const audioBlob = await fetch(audioBlobURL).then((r) => r.blob());
+    const mediaFile = new File([audioBlob], { type: "audio/ogg" });
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const prog = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setProgress(prog);
-        },
-        (err) => console.log(err),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((url) =>
-            console.log(url)
-          );
-        }
-      );
-    });
+    if (!mediaFile) return;
+
+    const storageRef = ref(
+      storage,
+      `/${props.uid}/${props.translatedStory.title}`
+    );
+    const uploadTask = uploadBytesResumable(storageRef, mediaFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+      },
+      (err) => Alert(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) =>
+          setTeaacheraudio(url)
+        );
+      }
+    );
   };
 
-  // const addDoc =
-  //   (colRef,
-  //   {
-  //     uid: props.uid,
-  //     title: props.translateStory.title,
-  //     story: props.translateStory.body,
-  //     author: props.translateStory.author,
-  //     audioURL: String(`${props.uid}/${props.translateStory.title}`),
-  //   });
-  // // .then(function (docRef) {
-  // //   return docRef.id;
-  // // });
+  const addtoDB = (event) => {
+    event.currentTarget.disabled = true;
+    addDoc(colRef, {
+      uid: props.uid,
+      title: props.translatedStory.title,
+      story: props.translatedStory.body,
+      author: props.translatedStory.author,
+      audioURL: teacheraudio,
+      commentsURL: null,
+    }).then((docRef) => {
+      console.log(docRef.id);
+    });
+  };
 
   const popover = (
     <Popover id="popover-basic">
@@ -78,7 +88,7 @@ const Translatebar = (props) => {
           >
             Stop
           </Button>
-          <Button size="sm" onClick={() => saveFile}>
+          <Button size="sm" onClick={() => uploadAudio()}>
             Save
           </Button>
           <div className="row ms-auto align-items-center">
@@ -114,13 +124,12 @@ const Translatebar = (props) => {
       <div className="container d-flex">
         <DropdownTranslate translateStory={props.translateStory} />
         <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-          <Button className="btn btn-light text-dark ms-2">Record</Button>
+          <Button className="btn btn-light text-dark ms-2" onClick={Record}>
+            Record
+          </Button>
         </OverlayTrigger>
         <div className="ms-auto">
-          <Button
-            className="btn btn-light text-dark ms-2"
-            onClick={() => addDoc()}
-          >
+          <Button className="btn btn-light text-dark ms-2" onClick={addtoDB}>
             Publish
           </Button>
         </div>

@@ -16,12 +16,12 @@ function StoryPage() {
     return story.id === id;
   });
 
+  const [translatedStory, setTranslatedStory] = useState(foundStory);
+
   // Declare state variables, internal to this page. Default to un-translated story
   const [title, setTitle] = useState(foundStory.title);
   const [author, setAuthor] = useState(foundStory.author);
   const [body, setBody] = useState(foundStory.body);
-
-  const [translatedStory, setTranslatedStory] = useState(null);
 
   const translateStory = (targetedLang) => {
     console.log("translateStory() called with targetedLang=" + targetedLang);
@@ -54,7 +54,11 @@ function StoryPage() {
   return (
     <>
       <Topbar />
-      <Translatebar translateStory={translateStory} uid={uid} />
+      <Translatebar
+        translateStory={translateStory}
+        uid={uid}
+        translatedStory={translatedStory}
+      />
       <Container>
         <Row className="justify-content-md-center mt-4">
           <Col className="col-lg-6">

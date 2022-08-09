@@ -1,26 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const VoiceRecorder = () => {
-  const [mediastatus, setMediastatus] = useState("Acquiring media");
-  const [audioBlobURL, setAudioBlobURL] = useState("");
+  const [mediastatus, setMediastatus] = useState("Idle");
+  const [audioBlobURL, setAudioBlobURL] = useState(null);
   const [chunks, setChunks] = useState();
   const [mediarecorder, setMediarecorder] = useState(null);
 
-  useEffect(() => {
-    // Lazily obtain recorder first time we're recording.
+  const Record = () => {
     if (!mediarecorder) {
       enableStream().then(setMediarecorder, console.error);
     }
     return;
-  }, [mediarecorder]);
-
-  const saveChunks = (e) => {
-    setChunks(e.data);
-    setAudioBlobURL(URL.createObjectURL(e.data));
   };
 
   const voiceRecorderStart = () => {
     try {
+      setChunks();
       mediarecorder.start();
       mediarecorder.addEventListener("dataavailable", saveChunks);
       setMediastatus("Recording");
@@ -32,17 +27,22 @@ export const VoiceRecorder = () => {
   const voiceRecorderStop = () => {
     mediarecorder.stop();
     setMediastatus("Stopped");
-    setChunks();
     mediarecorder.removeEventListener("dataavailable", saveChunks);
   };
 
-  const saveFile = async () => {
+  const saveFile = () => {
     setMediastatus("Saving");
-    const audioBlob = await fetch(audioBlobURL).then((r) => r.blob());
-    return new File([audioBlob], "voice.wav", { type: "audio/wav" });
+    const blob = new Blob(chunks, { type: "audio/wav" });
+    return new File([blob], { type: "audio/wav" });
+  };
+
+  const saveChunks = (e) => {
+    setChunks(e.data);
+    setAudioBlobURL(URL.createObjectURL(e.data));
   };
 
   return {
+    Record,
     mediastatus,
     audioBlobURL,
     voiceRecorderStart,
