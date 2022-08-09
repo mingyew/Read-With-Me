@@ -3,40 +3,37 @@ import { useState, useEffect } from "react";
 export const VoiceRecorder = () => {
   const [mediastatus, setMediastatus] = useState("Acquiring media");
   const [audioBlobURL, setAudioBlobURL] = useState("");
-  const [chunks, setChunks] = useState(null);
+  const [chunks, setChunks] = useState();
   const [mediarecorder, setMediarecorder] = useState(null);
 
   useEffect(() => {
     // Lazily obtain recorder first time we're recording.
     if (!mediarecorder) {
-      if (mediastatus === "Recording") {
-        console.log("test");
-        enableStream().then(setMediarecorder, console.error);
-      }
-      return;
+      enableStream().then(setMediarecorder, console.error);
     }
-  }, [mediarecorder, mediastatus]);
+    return;
+  }, [mediarecorder]);
+
+  const saveChunks = (e) => {
+    setChunks(e.data);
+    setAudioBlobURL(URL.createObjectURL(e.data));
+  };
 
   const voiceRecorderStart = () => {
     try {
-      setMediastatus("Recording");
       mediarecorder.start();
-      mediarecorder.ondataavailable = (e) => {
-        setChunks(e.data);
-      };
-      mediarecorder.onstop = voiceRecorderStop;
+      mediarecorder.addEventListener("dataavailable", saveChunks);
+      setMediastatus("Recording");
     } catch (err) {
       setMediastatus(`${err}`);
     }
   };
 
   const voiceRecorderStop = () => {
-    const audioBlob = new Blob(chunks, { type: "audio/wav" });
-    const audioURL = URL.createObjectURL(audioBlob);
-    setAudioBlobURL(audioURL);
+    mediarecorder.stop();
     setMediastatus("Stopped");
-
-    setChunks("");
+    setChunks();
+    mediarecorder.removeEventListener("dataavailable", saveChunks);
   };
 
   const saveFile = async () => {
