@@ -3,36 +3,24 @@ import { useState, useEffect } from "react";
 export const VoiceRecorder = () => {
   const [mediastatus, setMediastatus] = useState("Acquiring media");
   const [audioBlobURL, setAudioBlobURL] = useState("");
-  const [chunks, setChunks] = useState("");
-  const [mediarecorder, setMediarecorder] = useState("");
-
-  async function enableStream() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
-      return new MediaRecorder(stream);
-    } catch (err) {
-      setMediastatus(`${err}`);
-    }
-    setMediastatus("Idle");
-  }
+  const [chunks, setChunks] = useState(null);
+  const [mediarecorder, setMediarecorder] = useState(null);
 
   useEffect(() => {
     // Lazily obtain recorder first time we're recording.
-    if (mediarecorder === null) {
+    if (!mediarecorder) {
       if (mediastatus === "Recording") {
+        console.log("test");
         enableStream().then(setMediarecorder, console.error);
       }
       return;
     }
-  }, [mediarecorder]);
+  }, [mediarecorder, mediastatus]);
 
   const voiceRecorderStart = () => {
     try {
-      console.log("test");
-      mediarecorder.start();
       setMediastatus("Recording");
+      mediarecorder.start();
       mediarecorder.ondataavailable = (e) => {
         setChunks(e.data);
       };
@@ -48,7 +36,7 @@ export const VoiceRecorder = () => {
     setAudioBlobURL(audioURL);
     setMediastatus("Stopped");
 
-    chunks = [];
+    setChunks("");
   };
 
   const saveFile = async () => {
@@ -65,3 +53,10 @@ export const VoiceRecorder = () => {
     saveFile,
   };
 };
+
+async function enableStream() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+  });
+  return new MediaRecorder(stream);
+}

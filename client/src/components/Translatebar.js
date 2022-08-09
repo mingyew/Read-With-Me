@@ -10,8 +10,16 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const Translatebar = (props) => {
   const [progress, setProgress] = useState(0);
 
+  const {
+    mediastatus,
+    audioBlobURL,
+    voiceRecorderStart,
+    voiceRecorderStop,
+    saveFile,
+  } = VoiceRecorder();
+
   const uploadAudio = async () => {
-    VoiceRecorder.saveFile.then((file) => {
+    VoiceRecorder.saveFile().then((file) => {
       if (!file) return;
       const storageRef = ref(
         storage,
@@ -58,7 +66,7 @@ const Translatebar = (props) => {
             variant="success"
             size="sm"
             className="me-2"
-            onClick={VoiceRecorder.voiceRecorderStart}
+            onClick={voiceRecorderStart}
           >
             Start
           </Button>
@@ -66,15 +74,15 @@ const Translatebar = (props) => {
             variant="danger"
             size="sm"
             className="me-2"
-            onClick={VoiceRecorder.voiceRecorderStop}
+            onClick={voiceRecorderStop}
           >
             Stop
           </Button>
-          <Button size="sm" onClick={() => uploadAudio}>
+          <Button size="sm" onClick={() => saveFile}>
             Save
           </Button>
           <div className="row ms-auto align-items-center">
-            <h2 style={{ fontSize: 12 }}>{VoiceRecorder.mediaStatus}</h2>
+            <h2 style={{ fontSize: 12 }}>{mediastatus}</h2>
             <ProgressBar
               striped
               now={progress}
@@ -85,7 +93,7 @@ const Translatebar = (props) => {
       </Popover.Header>
       <Popover.Body>
         <audio
-          src={VoiceRecorder.audioBlobURL}
+          src={audioBlobURL}
           width={250}
           controls
           autoPlay
