@@ -66,7 +66,7 @@ const Translatebar = (props) => {
       author: props.translatedStory.author,
       audioURL: teacheraudio,
       commentsURL: null,
-      dateCreated: new Date(),
+      dateCreated: JSON.stringify(new Date()),
     };
 
     addDoc(colRef, docFields).then(() => {

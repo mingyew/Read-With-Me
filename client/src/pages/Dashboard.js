@@ -8,17 +8,23 @@ import { useAuth } from "../contexts/AuthContext";
 export default function Dashboard() {
   const { currentUser } = useAuth();
 
-  const savedstories = [];
+  const [savedstories, setSavedstories] = useState([]);
 
   const q = query(colRef, where("uid", "==", `${currentUser.uid}`));
 
-  useEffect(() => {
+  function getSavedstories() {
+    const items = [];
     onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        savedstories.push(Object.entries({ ...doc.data(), id: doc.id }));
+      snapshot.forEach((doc) => {
+        items.push({ ...doc.data(), id: doc.id });
       });
     });
-  });
+    setSavedstories(items);
+  }
+
+  useEffect(() => {
+    getSavedstories();
+  }, []);
 
   return (
     <>
@@ -35,20 +41,11 @@ export default function Dashboard() {
                 <th>Link</th>
               </tr>
             </thead>
-            <tbody>
-              {console.log(savedstories)}
-              {savedstories.map((story, index) => (
-                <tr key={story.id}>
-                  <td>{index}</td>
-                  <td>{story.title} test</td>
-                  <td>{story.author}</td>
-                  <td>{story.dateCreated}</td>
-                  <td>{story.id}</td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody></tbody>
           </Table>
         </Row>
+        {console.log(savedstories)}
+        {console.log(savedstories[0])}
       </Container>
     </>
   );
