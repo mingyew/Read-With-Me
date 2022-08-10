@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Topbar from "../components/Topbar.js";
 import { Row, Table, Container } from "react-bootstrap";
+import { colRef } from "../firebase";
+import { onSnapshot, query, where } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Dashboard() {
+  const { currentUser } = useAuth();
+
+  const savedstories = [];
+
+  const q = query(colRef, where("uid", "==", `${currentUser.uid}`));
+
+  useEffect(() => {
+    onSnapshot(q, (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        savedstories.push(Object.entries({ ...doc.data(), id: doc.id }));
+      });
+    });
+  });
+
   return (
     <>
       <Topbar />
@@ -12,29 +29,23 @@ export default function Dashboard() {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Story</th>
+                <th>Title</th>
+                <th>Author</th>
                 <th>Date Created</th>
                 <th>Link</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td colSpan={2}>Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
+              {console.log(savedstories)}
+              {savedstories.map((story, index) => (
+                <tr key={story.id}>
+                  <td>{index}</td>
+                  <td>{story.title} test</td>
+                  <td>{story.author}</td>
+                  <td>{story.dateCreated}</td>
+                  <td>{story.id}</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Row>

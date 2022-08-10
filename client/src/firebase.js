@@ -18,15 +18,4 @@ export const storage = getStorage(app);
 const db = getFirestore();
 export const colRef = collection(db, "savedstories");
 
-// getDocs(colRef)
-//   .then((snapshot) => {
-//     let savedstories = [];
-//     savedstories.docs.forEach((doc) => {
-//       savedstories.push({ ...doc.data, id: doc.id });
-//     });
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
 export default app;

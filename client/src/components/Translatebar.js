@@ -3,6 +3,7 @@ import DropdownTranslate from "./Dropdownbutton";
 import { storage, colRef } from "../firebase";
 import { addDoc } from "firebase/firestore";
 import { VoiceRecorder } from "./VoiceRecorder";
+import { useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -16,6 +17,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const Translatebar = (props) => {
   const [progress, setProgress] = useState(0);
   const [teacheraudio, setTeaacheraudio] = useState(null);
+  const navigate = useNavigate();
 
   const {
     mediastatus,
@@ -56,15 +58,19 @@ const Translatebar = (props) => {
 
   const addtoDB = (event) => {
     event.currentTarget.disabled = true;
-    addDoc(colRef, {
+
+    const docFields = {
       uid: props.uid,
       title: props.translatedStory.title,
       story: props.translatedStory.body,
       author: props.translatedStory.author,
       audioURL: teacheraudio,
       commentsURL: null,
-    }).then((docRef) => {
-      console.log(docRef.id);
+      dateCreated: new Date(),
+    };
+
+    addDoc(colRef, docFields).then(() => {
+      navigate("/");
     });
   };
 

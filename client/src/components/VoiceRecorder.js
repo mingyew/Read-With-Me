@@ -32,8 +32,6 @@ export const VoiceRecorder = () => {
 
   const saveFile = () => {
     setMediastatus("Saving");
-    const blob = new Blob(chunks, { type: "audio/wav" });
-    return new File([blob], { type: "audio/wav" });
   };
 
   const saveChunks = (e) => {
@@ -47,7 +45,6 @@ export const VoiceRecorder = () => {
     audioBlobURL,
     voiceRecorderStart,
     voiceRecorderStop,
-    saveFile,
   };
 };
 
