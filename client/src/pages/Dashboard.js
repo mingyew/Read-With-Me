@@ -2,24 +2,26 @@ import React, { useEffect, useState } from "react";
 import Topbar from "../components/Topbar.js";
 import { Row, Table, Container } from "react-bootstrap";
 import { colRef } from "../firebase";
-import { onSnapshot, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
 
-  const [savedstories, setSavedstories] = useState([]);
+  const [savedstories, setSavedstories] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const q = query(colRef, where("uid", "==", `${currentUser.uid}`));
 
-  function getSavedstories() {
+  async function getSavedstories() {
+    setLoading(true);
+    const querySnapshot = await getDocs(q);
     const items = [];
-    onSnapshot(q, (snapshot) => {
-      snapshot.forEach((doc) => {
-        items.push({ ...doc.data(), id: doc.id });
-      });
+    querySnapshot.forEach((doc) => {
+      items.push({ ...doc.data(), id: doc.id });
     });
     setSavedstories(items);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -41,11 +43,20 @@ export default function Dashboard() {
                 <th>Link</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {savedstories &&
+                savedstories.map((value, index) => {
+                  <tr key={value.dateCreated}>
+                    <td>{index}</td>
+                    <td>{value.title}</td>
+                    <td>{value.author}</td>
+                    <td>{value.id}</td>
+                  </tr>;
+                })}
+            </tbody>
           </Table>
         </Row>
-        {console.log(savedstories)}
-        {console.log(savedstories[0])}
+        {savedstories && savedstories[1].title}
       </Container>
     </>
   );
