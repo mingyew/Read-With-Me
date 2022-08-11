@@ -32,7 +32,7 @@ const Topbar = () => {
       bg="dark"
       variant="dark"
       style={{
-        borderBottom: "1px solid gray",
+        borderBottom: "1px solid black",
       }}
     >
       <Container>

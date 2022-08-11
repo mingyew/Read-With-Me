@@ -4,6 +4,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import StoryPage from "./pages/StoryPage";
+import SavedStoryPage from "./pages/SavedStoryPage";
 import Signup from "./pages/Signup";
 import Stories from "./pages/Stories";
 import Login from "./pages/Login";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/stories" element={<Stories />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/saved/:linkid" element={<SavedStoryPage />}></Route>
           <Route path="/story/:id/:uid" element={<StoryPage />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         </Routes>

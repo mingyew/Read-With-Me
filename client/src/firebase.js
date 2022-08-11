@@ -15,7 +15,7 @@ const app = firebase.initializeApp({
 export const auth = app.auth();
 export const storage = getStorage(app);
 
-const db = getFirestore();
+export const db = getFirestore();
 export const colRef = collection(db, "savedstories");
 
 export default app;
