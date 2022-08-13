@@ -46,35 +46,6 @@ app.post("/api/translate-text", async (req, res) => {
   res.json({ translated: translation });
 });
 
-//USER DATABASE
-
-var db = mysql.createConnection({
-  user: "readwithme",
-  host: "127.0.0.1",
-  password: "readwithme12345",
-  database: "savedstories",
-  port: 3005,
-});
-
-app.post("/create-user", async (req, res) => {
-  const username = req.body.username;
-  db.query(
-    "INSERT INTO user (savedlinks.user) VALUES (?)",
-    [username],
-    (err, results) => {
-      console.log(err);
-    }
-  );
-});
-
-db.query(
-  "INSERT INTO savedlinks.user (username) VALUES (?)",
-  ["test"],
-  (err, results) => {
-    console.log(err);
-  }
-);
-
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

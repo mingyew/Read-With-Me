@@ -49,14 +49,6 @@ function StoryPage() {
       });
   };
 
-  const renderTitle = () => {
-    if (savedstory != undefined || savedstory != null) return savedstory.title;
-  };
-
-  const renderAuthor = () => {
-    if (savedstory != undefined || savedstory != null) return savedstory.author;
-  };
-
   return (
     <>
       <Topbar />
@@ -81,7 +73,7 @@ function StoryPage() {
             className="justify-content-md-end mt-1"
             style={{ color: "grey" }}
           >
-            Referenced from {savedstory && savedstory.author}
+            {savedstory && savedstory.author}
           </Row>
           <Comments
             commentsUrl="http://localhost:3010/comments"

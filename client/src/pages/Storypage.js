@@ -78,7 +78,7 @@ function StoryPage() {
           </Col>
         </Row>
         <Row className="justify-content-md-end mt-1" style={{ color: "grey" }}>
-          Referenced from {author}
+          {author}
         </Row>
         <Comments
           commentsUrl="http://localhost:3010/comments"
