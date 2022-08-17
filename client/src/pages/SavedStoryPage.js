@@ -8,8 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
-function StoryPage() {
-  const { linkid } = useParams();
+function SavedStoryPage() {
+  const { uid, linkid } = useParams();
 
   const [loading, setLoading] = useState(false);
   const [savedstory, setSavedstory] = useState(null);
@@ -75,14 +75,11 @@ function StoryPage() {
           >
             {savedstory && savedstory.author}
           </Row>
-          <Comments
-            commentsUrl="http://localhost:3010/comments"
-            currentUserId="1"
-          />
+          <Comments uid={uid} linkid={linkid} />
         </Container>
       )}
     </>
   );
 }
 
-export default StoryPage;
+export default SavedStoryPage;

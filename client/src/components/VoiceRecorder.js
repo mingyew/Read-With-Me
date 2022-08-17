@@ -30,10 +30,6 @@ export const VoiceRecorder = () => {
     mediarecorder.removeEventListener("dataavailable", saveChunks);
   };
 
-  const saveFile = () => {
-    setMediastatus("Saving");
-  };
-
   const saveChunks = (e) => {
     setChunks(e.data);
     setAudioBlobURL(URL.createObjectURL(e.data));

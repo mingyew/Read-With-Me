@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DropdownTranslate from "./Dropdownbutton";
-import { storage, colRef } from "../firebase";
+import { storage, storiesRef } from "../firebase";
 import { addDoc } from "firebase/firestore";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { useNavigate } from "react-router-dom";
@@ -69,9 +69,13 @@ const Translatebar = (props) => {
       dateCreated: JSON.stringify(new Date()),
     };
 
-    addDoc(colRef, docFields).then(() => {
+    addDoc(storiesRef, docFields).then(() => {
       navigate("/");
     });
+  };
+
+  const edit = (body) => {
+    navigate(`/story/edit/${props.id}/${props.uid}`);
   };
 
   const popover = (

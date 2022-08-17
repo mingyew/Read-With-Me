@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Translatebar from "../components/Translatebar.js";
 import Topbar from "../components/Topbar.js";
 import Storylist from "../stories/Storylist";
+import Editable from "../components/Editable.js";
 import { useParams } from "react-router";
-import Comments from "../components/Comments";
 
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -19,6 +19,7 @@ function StoryPage() {
   const [translatedStory, setTranslatedStory] = useState(foundStory);
 
   // Declare state variables, internal to this page. Default to un-translated story
+  const inputRef = useRef();
   const [title, setTitle] = useState(foundStory.title);
   const [author, setAuthor] = useState(foundStory.author);
   const [body, setBody] = useState(foundStory.body);
@@ -56,7 +57,9 @@ function StoryPage() {
       <Topbar />
       <Translatebar
         translateStory={translateStory}
+        id={id}
         uid={uid}
+        body={body}
         translatedStory={translatedStory}
       />
       <Container>
@@ -67,23 +70,62 @@ function StoryPage() {
                 fontWeight: "700",
               }}
             >
-              {title}
+              <Editable
+                text={title}
+                placeholder="Title"
+                childRef={inputRef}
+                type="input"
+              >
+                <input
+                  ref={inputRef}
+                  type="text"
+                  name="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Editable>
             </h2>
-            {body.map((paragraph, i) => (
-              <div key={i}>
-                {paragraph}
-                <br />
-              </div>
-            ))}
+
+            <Editable
+              text={body.map((paragraph, i) => (
+                <div key={i}>
+                  {paragraph}
+                  <br />
+                </div>
+              ))}
+              type="textarea"
+              placeholder="Body"
+              childRef={inputRef}
+            >
+              <textarea
+                ref={inputRef}
+                name="body"
+                rows="25"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                style={{ width: 550 }}
+              />
+            </Editable>
           </Col>
         </Row>
-        <Row className="justify-content-md-end mt-1" style={{ color: "grey" }}>
-          {author}
+        <Row className="mt-1" style={{ color: "grey" }}>
+          <div class="d-flex justify-content-end">
+            <Editable
+              text={author}
+              placeholder="Author"
+              type="input"
+              childRef={inputRef}
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                name="title"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </Editable>
+          </div>
         </Row>
-        <Comments
-          commentsUrl="http://localhost:3010/comments"
-          currentUserId="1"
-        />
       </Container>
     </>
   );

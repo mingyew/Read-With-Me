@@ -1,10 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DropdownTranslate from "./Dropdownbutton";
-import { storage, colRef } from "../firebase";
-import { addDoc } from "firebase/firestore";
-import { VoiceRecorder } from "./VoiceRecorder";
-import { useNavigate } from "react-router-dom";
-
 import { ButtonGroup, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 
 const Listenbar = (props) => {
@@ -43,45 +37,53 @@ const Listenbar = (props) => {
         backgroundColor: "#F57C00 ",
       }}
     >
-      {console.log(props.audioURL)}
       <div className="container d-flex">
         <div className="ms-auto">
-          {/* <audio id="player" src={props.audioURL}></audio> */}
+          <audio id="player" src={props.audioURL}></audio>
           {loading ? (
             <h4>Loading...</h4>
           ) : (
-            <ButtonGroup>
-              <ToggleButtonGroup
-                type="radio"
-                name="options"
-                defaultValue="stop"
-              >
-                <ToggleButton
-                  id="Listen"
-                  variant="outline-success"
-                  value="play"
-                  onClick={audioPlay()}
+            <fieldset>
+              <img
+                src="/images/volume.png"
+                className="img-fluid me-3"
+                style={{
+                  height: 23,
+                }}
+              ></img>
+              <ButtonGroup>
+                <ToggleButtonGroup
+                  type="radio"
+                  name="options"
+                  defaultValue="stop"
                 >
-                  Listen
-                </ToggleButton>
-                <ToggleButton
-                  id="pause"
-                  variant="outline-secondary"
-                  value="pause"
-                  onClick={teacheraudio && teacheraudio.pause()}
-                >
-                  Pause
-                </ToggleButton>
-                <ToggleButton
-                  id="srop"
-                  variant="outline-danger"
-                  value="stop"
-                  onClick={() => audioStop()}
-                >
-                  Stop
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </ButtonGroup>
+                  <ToggleButton
+                    id="Listen"
+                    variant="outline-success"
+                    value="play"
+                    onClick={audioPlay()}
+                  >
+                    Listen
+                  </ToggleButton>
+                  <ToggleButton
+                    id="pause"
+                    variant="outline-secondary"
+                    value="pause"
+                    onClick={teacheraudio && teacheraudio.pause()}
+                  >
+                    Pause
+                  </ToggleButton>
+                  <ToggleButton
+                    id="stop"
+                    variant="outline-danger"
+                    value="stop"
+                    onClick={() => audioStop()}
+                  >
+                    Stop
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </ButtonGroup>
+            </fieldset>
           )}
         </div>
       </div>

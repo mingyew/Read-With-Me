@@ -16,6 +16,7 @@ export const auth = app.auth();
 export const storage = getStorage(app);
 
 export const db = getFirestore();
-export const colRef = collection(db, "savedstories");
+export const storiesRef = collection(db, "savedstories");
+export const commentsRef = collection(db, "comments");
 
 export default app;

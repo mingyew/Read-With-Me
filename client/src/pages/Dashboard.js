@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Topbar from "../components/Topbar.js";
 import { Row, Table, Container, Alert } from "react-bootstrap";
-import { colRef } from "../firebase";
+import { storiesRef } from "../firebase";
+import { deleteDoc, doc } from "firebase/firestore";
 import { getDocs, query, where } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -13,7 +14,7 @@ export default function Dashboard() {
   const [savedstories, setSavedstories] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const q = query(colRef, where("uid", "==", `${currentUser.uid}`));
+  const q = query(storiesRef, where("uid", "==", `${currentUser.uid}`));
 
   const getSavedstories = async () => {
     setLoading(true);
@@ -37,6 +38,14 @@ export default function Dashboard() {
     };
   }, []);
 
+  const deleteStory = async (id) => {
+    if (window.confirm("Are you sure you want to delete saved story?")) {
+      await deleteDoc(doc(storiesRef, id)).then(() => {
+        window.location.reload();
+      });
+    }
+  };
+
   const renderTable = () => {
     if (savedstories != undefined || savedstories != null)
       return savedstories.map((value, index) => {
@@ -47,10 +56,23 @@ export default function Dashboard() {
             <td>{value.author}</td>
             <td>{value.dateCreated}</td>
             <td>
-              <Link to={`/saved/${value.id}`}>
-                {currentLocation}saved/
-                {value.id}
+              <Link to={`/${value.uid}/${value.id}`}>
+                {currentLocation}
+                {value.uid}/{value.id}
               </Link>
+            </td>
+            <td
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="/images/trashbin.png"
+                onClick={deleteStory(value.id)}
+                style={{
+                  height: 23,
+                }}
+              ></img>
             </td>
           </tr>
         );
@@ -73,6 +95,7 @@ export default function Dashboard() {
                   <th>Author</th>
                   <th>Date Created</th>
                   <th>Link</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>{renderTable()}</tbody>

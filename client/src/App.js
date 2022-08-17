@@ -23,7 +23,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/stories" element={<Stories />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/saved/:linkid" element={<SavedStoryPage />}></Route>
+          <Route path="/:uid/:linkid" element={<SavedStoryPage />}></Route>
           <Route path="/story/:id/:uid" element={<StoryPage />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         </Routes>
