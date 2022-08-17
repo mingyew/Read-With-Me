@@ -60,7 +60,7 @@ const Comment = ({
         </div>
 
         <div className="comment-audio mt-1">
-          <audio id="studentplayer" src={audioURL}></audio>
+          <audio id={`player${username}`} src={audioURL}></audio>
           {loading ? (
             <h4>Loading...</h4>
           ) : (
@@ -68,12 +68,11 @@ const Comment = ({
               <ButtonGroup>
                 <ToggleButtonGroup
                   type="radio"
-                  name={`studentplayer`}
-                  {...commentid}
+                  name={`studentplayer${username}`}
                   defaultValue="stop"
                 >
                   <ToggleButton
-                    id={`studentplay`}
+                    id={`studentplay${username}`}
                     variant="outline-success"
                     value="play"
                     onClick={studentaudioPlay()}
@@ -81,7 +80,7 @@ const Comment = ({
                     Listen
                   </ToggleButton>
                   <ToggleButton
-                    id={`studentpause`}
+                    id={`studentpause${username}`}
                     variant="outline-secondary"
                     value="pause"
                     onClick={studentaudio && studentaudio.pause()}
@@ -89,7 +88,7 @@ const Comment = ({
                     Pause
                   </ToggleButton>
                   <ToggleButton
-                    id={`studentstop`}
+                    id={`studentstop${username}`}
                     variant="outline-danger"
                     value="stop"
                     onClick={() => studentaudioStop()}

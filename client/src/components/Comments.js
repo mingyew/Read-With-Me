@@ -61,7 +61,7 @@ const Comments = (props) => {
 
   const uploadAudio = async (callback) => {
     const audioBlob = await fetch(audioBlobURL).then((r) => r.blob());
-    const mediaFile = new File([audioBlob], { type: "audio/ogg" });
+    const mediaFile = new File([audioBlob], { type: "audio/mp3" });
 
     if (!mediaFile) return;
 
@@ -189,7 +189,6 @@ const Comments = (props) => {
         <h2>Loading...</h2>
       ) : (
         <div className="comments-container">
-          {console.log(comments)}
           {comments &&
             comments.map((comment, index) => (
               <Comment

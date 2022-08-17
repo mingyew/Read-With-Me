@@ -5,7 +5,7 @@ import Storylist from "../stories/Storylist";
 import Editable from "../components/Editable.js";
 import { useParams } from "react-router";
 
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Alert } from "react-bootstrap";
 
 function StoryPage() {
   const { id, uid } = useParams();
@@ -25,7 +25,6 @@ function StoryPage() {
   const [body, setBody] = useState(foundStory.body);
 
   const translateStory = (targetedLang) => {
-    console.log("translateStory() called with targetedLang=" + targetedLang);
     fetch("http://localhost:3001/api/translate-text", {
       method: "POST",
       body: JSON.stringify({ text: foundStory, language: targetedLang }),
@@ -38,8 +37,25 @@ function StoryPage() {
         if (data.translated) {
           setTranslatedStory(data.translated);
         } else {
-          // do something with the error
-          setTranslatedStory({ title: "ERROR", author: "ERROR", body: [] });
+          Alert("Error translating");
+        }
+      });
+  };
+
+  const translateBack = (targetedLang) => {
+    fetch("http://localhost:3001/api/translate-text", {
+      method: "POST",
+      body: JSON.stringify({ text: foundStory, language: targetedLang }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.translated) {
+          setTranslatedStory(data.translated);
+        } else {
+          Alert("Error translating");
         }
       });
   };

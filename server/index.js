@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const { Translate } = require("@google-cloud/translate").v2;
-var mysql = require("mysql2");
+const textToSpeech = require("@google-cloud/text-to-speech");
+const fs = require("fs");
+const util = require("util");
 
 const translate = new Translate({
   projectId: "project_id=read-with-me-354921",
@@ -40,6 +42,30 @@ const translateStory = async (story, targetedLang) => {
     return null;
   }
 };
+
+//TEXT-TO-SPEECH
+const client = new textToSpeech.TextToSpeechClient();
+
+const texttoSpeech = async (text, targetedLang) => {
+  const request = {
+    input: { text: text },
+    // Select the language and SSML voice gender (optional)
+    voice: { languageCode: targetedLang, ssmlGender: "NEUTRAL" },
+    // select the type of audio encoding
+    audioConfig: { audioEncoding: "MP3" },
+  };
+
+  // Performs the text-to-speech request
+  const [response] = await client.synthesizeSpeech(request);
+  return response.audioContent;
+};
+
+//HTTP REQUESTS
+
+app.post("/api/text-to-speech", async (req, res) => {
+  const audio = await texttoSpeech(req.body.text, req.body.language);
+  res.json({ speech: audio });
+});
 
 app.post("/api/translate-text", async (req, res) => {
   const translation = await translateStory(req.body, req.body.language);

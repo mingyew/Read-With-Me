@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Topbar from "../components/Topbar.js";
 import Listenbar from "../components/Listenbar.js";
-import { useParams } from "react-router";
+import HighlightPop from "../components/HighlightPop.js";
 import Comments from "../components/Comments";
+import { useParams } from "react-router";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
-import { Container, Row, Col, Alert } from "react-bootstrap";
+import { Container, Row, Col, Alert, Popover } from "react-bootstrap";
 
 function SavedStoryPage() {
   const { uid, linkid } = useParams();
@@ -75,6 +76,7 @@ function SavedStoryPage() {
           >
             {savedstory && savedstory.author}
           </Row>
+
           <Comments uid={uid} linkid={linkid} />
         </Container>
       )}

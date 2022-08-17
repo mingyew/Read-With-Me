@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/mingyew/Read-With-Me#readme",
   "dependencies": {
+    "@google-cloud/text-to-speech": "^4.0.0",
     "@google-cloud/translate": "^7.0.0",
     "bootstrap": "^5.2.0-beta1",
     "cors": "^2.8.5",

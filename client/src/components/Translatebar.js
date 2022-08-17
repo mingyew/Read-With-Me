@@ -29,7 +29,7 @@ const Translatebar = (props) => {
 
   const uploadAudio = async () => {
     const audioBlob = await fetch(audioBlobURL).then((r) => r.blob());
-    const mediaFile = new File([audioBlob], { type: "audio/ogg" });
+    const mediaFile = new File([audioBlob], { type: "audio/mp3" });
 
     if (!mediaFile) return;
 

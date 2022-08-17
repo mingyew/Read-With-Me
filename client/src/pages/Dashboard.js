@@ -68,7 +68,7 @@ export default function Dashboard() {
             >
               <img
                 src="/images/trashbin.png"
-                onClick={deleteStory(value.id)}
+                onClick={() => deleteStory(value.id)}
                 style={{
                   height: 23,
                 }}
