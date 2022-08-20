@@ -71,8 +71,9 @@ function StoryPage() {
           if (diff / translatedStory.body.toString().length < 0.5) return true;
           return false;
         } else {
-          setAlert(true);
-          setAlertmsg("Error translating back to English");
+          <Alert variant="danger">
+            Error calculating translation efficency.
+          </Alert>;
         }
       });
   };
