@@ -1,5 +1,5 @@
 import React from "react";
-import Topbar from "../components/Topbar.js";
+import TopNavBar from "../components/TopNavBar.js";
 import Story from "../components/Story.js";
 import Storylist from "../stories/Storylist";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,7 +11,7 @@ const Stories = () => {
 
   return (
     <>
-      <Topbar />
+      <TopNavBar />
       <Container>
         <h2
           className="mt-4 mb-5"

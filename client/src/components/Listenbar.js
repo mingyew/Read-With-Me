@@ -14,18 +14,14 @@ const Listenbar = (props) => {
   }, [props]);
 
   const audioStop = () => {
-    if (teacheraudio) {
-      teacheraudio.pause();
-      teacheraudio.currentTime = 0;
-    }
+    teacheraudio.pause();
+    teacheraudio.currentTime = 0;
     return;
   };
 
   const audioPlay = () => {
     if (teacheraudio) {
-      teacheraudio.addEventListener("canplaythrough", (event) => {
-        teacheraudio.play();
-      });
+      teacheraudio.play();
     }
     return;
   };
@@ -39,7 +35,6 @@ const Listenbar = (props) => {
     >
       <div className="container d-flex">
         <div className="ms-auto">
-          <audio id="player" src={props.audioURL}></audio>
           {loading ? (
             <h4>Loading...</h4>
           ) : (
@@ -58,10 +53,10 @@ const Listenbar = (props) => {
                   defaultValue="stop"
                 >
                   <ToggleButton
-                    id="Listen"
+                    id="listen"
                     variant="outline-success"
                     value="play"
-                    onClick={audioPlay()}
+                    onClick={() => audioPlay()}
                   >
                     Listen
                   </ToggleButton>

@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const { Translate } = require("@google-cloud/translate").v2;
 const textToSpeech = require("@google-cloud/text-to-speech");
+const admin = require("firebase-admin");
+const serviceAccount = require("../read-with-me-354921-a36e6788bf36.json");
 const fs = require("fs");
 const util = require("util");
 
@@ -20,6 +22,11 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 
+//VERIFICATION
+const firebaseapp = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
 //TRANSLATE
 const translateText = async (text, targetedLang) => {
   const translation = await translate.translate(text, targetedLang);
@@ -30,6 +37,7 @@ const translateText = async (text, targetedLang) => {
 const translateStory = async (story, targetedLang) => {
   var translatedStory = {};
   try {
+    translatedStory.lang = targetedLang;
     translatedStory.title = await translateText(story.text.title, targetedLang);
     translatedStory.body = await translateText(story.text.body, targetedLang);
     translatedStory.author = await translateText(
@@ -64,7 +72,7 @@ const texttoSpeech = async (text, targetedLang) => {
 
 app.post("/api/text-to-speech", async (req, res) => {
   const audio = await texttoSpeech(req.body.text, req.body.language);
-  res.json({ speech: audio });
+  res.json({ data: audio });
 });
 
 app.post("/api/translate-text", async (req, res) => {

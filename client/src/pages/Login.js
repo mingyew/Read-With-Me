@@ -33,6 +33,9 @@ export default function Login() {
     >
       <div className="w-100" style={{ maxWidth: "450px" }}>
         <>
+          <div className="d-flex justify-content-center mb-3">
+            <img src="/images/logo.png" />
+          </div>
           <Card>
             <Card.Body>
               <h2 className="text-center mb-4">Log In</h2>

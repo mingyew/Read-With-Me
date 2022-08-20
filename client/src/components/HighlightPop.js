@@ -1,11 +1,13 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+import { Button } from "react-bootstrap";
 
 const HighlightPop = (props) => {
   const [showPopover, setshowPopover] = useState(false);
+  const [text, setText] = useState(false);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
-  const [selectedText, setselectedText] = useState("");
-  const highlight = createRef();
+  const highlight = useRef();
   const { children, popoverItems } = props;
   const itemClass = "h-popover-item";
 
@@ -22,11 +24,8 @@ const HighlightPop = (props) => {
 
   const onMouseUp = () => {
     const selection = window.getSelection();
-    if (selection) {
-      setselectedText(selection.toString());
-    } else if (document.selection && document.selection.type !== "Control") {
-      setselectedText(document.selection.createRange().text);
-    }
+    const selectedText = selection.toString().trim();
+    setText(selectedText);
 
     if (!selectedText || !selectedText.length) {
       hidePopover();
@@ -76,6 +75,32 @@ const HighlightPop = (props) => {
     onHighlightPop(selectedText);
   };
 
+  const texttoSpeech = (targetedLang) => {
+    const arr = null;
+    fetch("http://localhost:3001/api/text-to-speech", {
+      method: "POST",
+      body: JSON.stringify({ text: text, language: targetedLang }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const arr = Uint8Array.from(response.data.data);
+        playAudioStream(arr);
+      });
+  };
+
+  const playAudioStream = async (array) => {
+    const audioContext = new AudioContext();
+    const audio = await audioContext.decodeAudioData(array.buffer);
+    const source = audioContext.createBufferSource();
+
+    source.buffer = audio;
+    source.connect(audioContext.destination);
+    source.start(0);
+  };
+
   return (
     <div ref={highlight}>
       {showPopover && (
@@ -89,7 +114,20 @@ const HighlightPop = (props) => {
             popoverItems(itemClass)
           ) : (
             <span role="button" className={itemClass}>
-              Add yours
+              <Button
+                variant="warning"
+                size="sm"
+                className="me-2 align-items-center"
+                onClick={() => texttoSpeech(props.lang)}
+              >
+                <img
+                  src="/images/volumeblack.png"
+                  style={{
+                    height: 20,
+                  }}
+                />
+              </Button>
+              {text}
             </span>
           )}
         </div>

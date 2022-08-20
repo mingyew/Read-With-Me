@@ -79,7 +79,7 @@ const Comments = (props) => {
         );
         setProgress(prog);
       },
-      (err) => Alert(err),
+      (err) => <Alert variant="danger">{err}</Alert>,
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           callback(url);
@@ -107,7 +107,7 @@ const Comments = (props) => {
       setLoading(true);
       uploadAudio(addtoDB);
     } catch {
-      Alert("Failed to save audio");
+      <Alert variant="danger">Failed to save audio!</Alert>;
     }
     setLoading(false);
   }
@@ -167,6 +167,7 @@ const Comments = (props) => {
     await updateDoc(docRef, {
       reply: text,
     });
+    window.location.reload(false);
   };
 
   const deleteComment = async (id) => {

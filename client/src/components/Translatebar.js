@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DropdownTranslate from "./Dropdownbutton";
 import { storage, storiesRef } from "../firebase";
-import { addDoc } from "firebase/firestore";
+import { addDoc, Timestamp } from "firebase/firestore";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { useNavigate } from "react-router-dom";
 
@@ -64,18 +64,15 @@ const Translatebar = (props) => {
       title: props.translatedStory.title,
       story: props.translatedStory.body,
       author: props.translatedStory.author,
+      lang: props.translatedStory.lang,
       audioURL: teacheraudio,
       commentsURL: null,
-      dateCreated: JSON.stringify(new Date()),
+      dateCreated: Timestamp.now(),
     };
 
     addDoc(storiesRef, docFields).then(() => {
       navigate("/");
     });
-  };
-
-  const edit = (body) => {
-    navigate(`/story/edit/${props.id}/${props.uid}`);
   };
 
   const popover = (

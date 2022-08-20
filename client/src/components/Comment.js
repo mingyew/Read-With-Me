@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonGroup, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -27,6 +27,14 @@ const Comment = ({
   const canReply = currentUser;
   const canDelete = currentUser;
 
+  useEffect(() => {
+    if (audioURL) {
+      setLoading(true);
+      setStudentaudio(new Audio(audioURL));
+    }
+    setLoading(false);
+  }, [audioURL]);
+
   const studentaudioStop = () => {
     if (studentaudio) {
       studentaudio.pause();
@@ -37,9 +45,7 @@ const Comment = ({
 
   const studentaudioPlay = () => {
     if (studentaudio) {
-      studentaudio.addEventListener("canplaythrough", (event) => {
-        studentaudio.play();
-      });
+      studentaudio.play();
     }
     return;
   };
@@ -60,7 +66,6 @@ const Comment = ({
         </div>
 
         <div className="comment-audio mt-1">
-          <audio id={`player${username}`} src={audioURL}></audio>
           {loading ? (
             <h4>Loading...</h4>
           ) : (
@@ -75,7 +80,7 @@ const Comment = ({
                     id={`studentplay${username}`}
                     variant="outline-success"
                     value="play"
-                    onClick={studentaudioPlay()}
+                    onClick={() => studentaudioPlay()}
                   >
                     Listen
                   </ToggleButton>

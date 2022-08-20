@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Translatebar from "../components/Translatebar.js";
-import Topbar from "../components/Topbar.js";
+import TopNavBar from "../components/TopNavBar.js";
 import Storylist from "../stories/Storylist";
 import Editable from "../components/Editable.js";
 import { useParams } from "react-router";
@@ -16,6 +16,7 @@ function StoryPage() {
     return story.id === id;
   });
 
+  const Diff = require("diff");
   const [translatedStory, setTranslatedStory] = useState(foundStory);
 
   // Declare state variables, internal to this page. Default to un-translated story
@@ -36,16 +37,21 @@ function StoryPage() {
       .then((data) => {
         if (data.translated) {
           setTranslatedStory(data.translated);
+          if (translatStoryback() == false || translatStoryback() == null) {
+            <Alert variant="danger">
+              Tanslation poor! Please edit by clicking on text area.
+            </Alert>;
+          }
         } else {
-          Alert("Error translating");
+          <Alert variant="danger">Error Translating</Alert>;
         }
       });
   };
 
-  const translateBack = (targetedLang) => {
+  const translatStoryback = () => {
     fetch("http://localhost:3001/api/translate-text", {
       method: "POST",
-      body: JSON.stringify({ text: foundStory, language: targetedLang }),
+      body: JSON.stringify({ text: translatedStory, language: "en" }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -53,9 +59,20 @@ function StoryPage() {
       .then((response) => response.json())
       .then((data) => {
         if (data.translated) {
-          setTranslatedStory(data.translated);
+          const diff = Diff.diffChars(
+            data.translated.body.toString(),
+            foundStory.body.toString()
+          );
+          var count = 0;
+          diff.forEach((part) => {
+            if (part.added) count = count + part.count;
+            if (part.removed) count = count + part.count;
+          });
+          if (diff / translatedStory.body.toString().length < 0.5) return true;
+          return false;
         } else {
-          Alert("Error translating");
+          setAlert(true);
+          setAlertmsg("Error translating back to English");
         }
       });
   };
@@ -70,9 +87,10 @@ function StoryPage() {
 
   return (
     <>
-      <Topbar />
+      <TopNavBar />
       <Translatebar
         translateStory={translateStory}
+        translatStoryback={translatStoryback}
         id={id}
         uid={uid}
         body={body}
@@ -125,7 +143,7 @@ function StoryPage() {
           </Col>
         </Row>
         <Row className="mt-1" style={{ color: "grey" }}>
-          <div class="d-flex justify-content-end">
+          <div className="d-flex justify-content-end">
             <Editable
               text={author}
               placeholder="Author"

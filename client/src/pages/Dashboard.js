@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Topbar from "../components/Topbar.js";
+import TopNavBar from "../components/TopNavBar.js";
 import { Row, Table, Container, Alert } from "react-bootstrap";
 import { storiesRef } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -30,7 +30,7 @@ export default function Dashboard() {
   useEffect(() => {
     getSavedstories().catch((err) => {
       if (!loading) return;
-      Alert("failed to fetch data", err);
+      <Alert variant="danger">Failed to fetch data</Alert>;
     });
 
     return () => {
@@ -54,7 +54,7 @@ export default function Dashboard() {
             <td>{index + 1}</td>
             <td>{value.title}</td>
             <td>{value.author}</td>
-            <td>{value.dateCreated}</td>
+            <td>{value.dateCreated.toDate().toDateString()}</td>
             <td>
               <Link to={`/${value.uid}/${value.id}`}>
                 {currentLocation}
@@ -81,7 +81,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Topbar />
+      <TopNavBar />
       <Container>
         <Row className="justify-content-md-center mt-4">
           {loading ? (
