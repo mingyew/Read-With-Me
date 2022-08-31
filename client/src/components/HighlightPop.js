@@ -68,7 +68,7 @@ const HighlightPop = (props) => {
     }
 
     setX(x + width / 2);
-    setY(y + window.scrollY - 10);
+    setY(y + -10);
     setshowPopover(true);
 
     const { onHighlightPop = () => {} } = props;
