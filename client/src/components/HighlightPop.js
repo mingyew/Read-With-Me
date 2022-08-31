@@ -77,7 +77,7 @@ const HighlightPop = (props) => {
 
   const texttoSpeech = (targetedLang) => {
     const arr = null;
-    fetch("http://localhost:3001/api/text-to-speech", {
+    fetch("/api/text-to-speech", {
       method: "POST",
       body: JSON.stringify({ text: text, language: targetedLang }),
       headers: {

@@ -12,16 +12,6 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function createUser(user) {
-    fetch("http://localhost:3001/create-user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: user }),
-    }).then((response) => {
-      console.log(response);
-    });
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -33,7 +23,6 @@ export default function Signup() {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
-      createUser(emailRef.current.value);
       navigate("/", { replace: true });
     } catch {
       setError("Failed to create an account");

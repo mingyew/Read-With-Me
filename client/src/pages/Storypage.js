@@ -26,7 +26,7 @@ function StoryPage() {
   const [body, setBody] = useState(foundStory.body);
 
   const translateStory = (targetedLang) => {
-    fetch("http://localhost:3001/api/translate-text", {
+    fetch("/api/translate-text", {
       method: "POST",
       body: JSON.stringify({ text: foundStory, language: targetedLang }),
       headers: {
@@ -49,7 +49,7 @@ function StoryPage() {
   };
 
   const translatStoryback = () => {
-    fetch("http://localhost:3001/api/translate-text", {
+    fetch("/api/translate-text", {
       method: "POST",
       body: JSON.stringify({ text: translatedStory, language: "en" }),
       headers: {
