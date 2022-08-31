@@ -205,7 +205,7 @@ const Translatebar = (props) => {
         >
           <Button
             className="btn btn-light text-dark ms-2"
-            onClick={texttoSpeech(props.translatedStory.lang)}
+            onClick={() => texttoSpeech(props.translatedStory.lang)}
           >
             Generate Reading
           </Button>

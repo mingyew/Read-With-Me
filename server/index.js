@@ -6,8 +6,7 @@ const fs = require("fs");
 const util = require("util");
 
 const translate = new Translate({
-  projectId: "project_id=read-with-me-354921",
-  keyFilename: "read-with-me-354921-a36e6788bf36.json",
+  projectId: "read-with-me-354921",
 });
 
 const PORT = process.env.PORT || 3001;
@@ -22,9 +21,6 @@ app.use(express.static(distDir));
 app.get("*", function (req, res) {
   res.sendFile(path.join(distDir, "index.html"));
 });
-
-app.use(express.json());
-app.use("*", cors());
 var allowCrossDomain = function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -32,6 +28,9 @@ var allowCrossDomain = function (req, res, next) {
   next();
 };
 app.use(allowCrossDomain);
+
+app.use(express.json());
+app.use("*", cors());
 
 //TRANSLATE
 const translateText = async (text, targetedLang) => {
