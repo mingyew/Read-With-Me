@@ -2,8 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const { Translate } = require("@google-cloud/translate").v2;
 const textToSpeech = require("@google-cloud/text-to-speech");
-const admin = require("firebase-admin");
-const serviceAccount = require("../read-with-me-354921-a36e6788bf36.json");
 const fs = require("fs");
 const util = require("util");
 
@@ -13,19 +11,27 @@ const translate = new Translate({
 });
 
 const PORT = process.env.PORT || 3001;
+const path = require("path");
 
 const app = express();
-const corsOptions = {
-  origin: "http://localhost:3000",
-};
+
+var distDir = __dirname + "/public/";
+
+app.use(express.static(distDir));
+
+app.get("*", function (req, res) {
+  res.sendFile(path.join(distDir, "index.html"));
+});
 
 app.use(express.json());
-app.use(cors(corsOptions));
-
-//VERIFICATION
-const firebaseapp = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+app.use("*", cors());
+var allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+};
+app.use(allowCrossDomain);
 
 //TRANSLATE
 const translateText = async (text, targetedLang) => {

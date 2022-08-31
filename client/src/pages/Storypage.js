@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Translatebar from "../components/Translatebar.js";
 import TopNavBar from "../components/TopNavBar.js";
-import Storylist from "../stories/Storylist";
+import Storylist from "../components/Storylist.json";
 import Editable from "../components/Editable.js";
 import { useParams } from "react-router";
 

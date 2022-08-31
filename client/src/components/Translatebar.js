@@ -123,6 +123,9 @@ const Translatebar = (props) => {
   );
 
   const texttoSpeech = (targetedLang) => {
+    if (targetedLang == "" || targetedLang == null) {
+      targetedLang = "en";
+    }
     const arr = null;
     fetch("http://localhost:3001/api/text-to-speech", {
       method: "POST",

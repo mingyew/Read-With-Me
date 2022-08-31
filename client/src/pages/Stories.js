@@ -1,13 +1,24 @@
 import React from "react";
 import TopNavBar from "../components/TopNavBar.js";
 import Story from "../components/Story.js";
-import Storylist from "../stories/Storylist";
+import Storylist from "../components/Storylist.json";
 import { useAuth } from "../contexts/AuthContext";
 import { Container, Row } from "react-bootstrap";
 
 const Stories = () => {
   const { currentUser } = useAuth();
   const stories = Object.values(Storylist);
+  const readingRate = 110; //would be change if age range changes
+
+  const countWordsInArray = (body) => {
+    var number = 0;
+
+    body.map(
+      (line) => (number += line.split(" ").filter((word) => word !== "").length)
+    );
+
+    return number;
+  };
 
   return (
     <>
@@ -30,7 +41,7 @@ const Stories = () => {
               image={story.image}
               title={story.title}
               author={story.author}
-              time={story.time}
+              time={Math.round(countWordsInArray(story.body) / readingRate)}
             />
           ))}
         </Row>

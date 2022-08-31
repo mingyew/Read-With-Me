@@ -4,6 +4,14 @@ import React from "react";
 
 // Story COMPONENT
 const Story = ({ id, image, title, author, time, uid }) => {
+  const minOrMins = (time) => {
+    if (time > 1) {
+      return "mins";
+    } else {
+      return "min";
+    }
+  };
+
   return (
     <Col className="mr-lg-5">
       <Link to={`/story/${id}/${uid}`}>
@@ -29,7 +37,7 @@ const Story = ({ id, image, title, author, time, uid }) => {
         </div>
         <div className="">
           <Badge pill bg="primary">
-            {time}
+            {time} {minOrMins(time)}
           </Badge>
         </div>
       </div>

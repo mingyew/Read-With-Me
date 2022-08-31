@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "https://read-with-me-server.herokuapp.com/static/css/main.fefda1ac.css",
+    "main.js": "https://read-with-me-server.herokuapp.com/static/js/main.e2f52166.js",
+    "index.html": "https://read-with-me-server.herokuapp.com/index.html",
+    "main.fefda1ac.css.map": "https://read-with-me-server.herokuapp.com/static/css/main.fefda1ac.css.map",
+    "main.e2f52166.js.map": "https://read-with-me-server.herokuapp.com/static/js/main.e2f52166.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fefda1ac.css",
+    "static/js/main.e2f52166.js"
+  ]
+}
